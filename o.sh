@@ -575,6 +575,7 @@ END_OF_SERVER_OUTPUT
 
   echo "For qr-codes, run qrencode commands:"
   echo -e "\033[1;32m"
+  echo "export apiUrl=\"${apiUrl}\" pinnedPubkey=\"${pinnedPubkey}\""
   curl --silent --insecure --pinnedpubkey "sha256//$pinnedPubkey" "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]' | xargs printf 'echo -n "%s" | qrencode -t UTF8\n'
   echo -e "\033[0m"
 
@@ -711,7 +712,7 @@ END_OF_SERVER_OUTPUT
 
   echo "For qr-codes, run qrencode commands:"
   echo -e "\033[1;32m"
-  curl --silent --insecure --pinnedpubkey "sha256//$pinnedPubkey" "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]' | xargs printf 'echo -n "%s" | qrencode -t UTF8\n'
+  curl --silent --insecure --pinnedpubkey "sha256//$pinnedPubkey" "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]' | xargs printf 'echo -n "%s" | qrencode -t UTF8\n' | head -n 1 |bash
   echo -e "\033[0m"
 
   echo "Add more users, run:"
