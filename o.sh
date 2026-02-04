@@ -644,11 +644,6 @@ function parse_flags() {
 # https://raw.githubusercontent.com/Jigsaw-Code/outline-server/master/src/shadowbox/server/api.yml
 # see also o-show-help.sh
 show() {
-ACCESS_CONFIG=/opt/outline/access.txt
-SB_CERTIFICATE_FILE=/opt/outline/persisted-state/shadowbox-selfsigned.crt
-function get_field_value {
-  grep "$1" "${ACCESS_CONFIG}" | sed "s/$1://"
-}
 
 if ! docker stats --no-stream --format '{{.ID}} {{.Name}}' shadowbox watchtower >/dev/null; then
     echo "Container shadowbox watchtower are not running"
