@@ -12,25 +12,36 @@ pinnedPubkey=$(sudo grep "apiUrl" $ACCESS_CONFIG | sed "s/^pinnedPubkey://")
 SB_CERTIFICATE_FILE=/opt/outline/persisted-state/shadowbox-selfsigned.crt
 pinnedPubkey=$(sudo openssl x509 -in "${SB_CERTIFICATE_FILE}" -pubkey -noout | openssl asn1parse -noout -inform pem -out - | openssl dgst -sha256 -binary | openssl base64)
 
+
+#apiUrl="$(get_field_value apiUrl)"
+#pinnedPubkey="$(get_field_value pinnedPubkey)"
+#pinnedPubkey=$(openssl x509 -in "${SB_CERTIFICATE_FILE}" -pubkey -noout | openssl asn1parse -noout -inform pem -out - | openssl dgst -sha256 -binary | openssl base64)
+
 echo
 echo "To connect to your Outline Server, please copy one of the following access keys"
-echo "to the Outline/Shadowsocks Client:"
+echo "into the Outline/Shadowsocks Client:"
 echo -e "\033[1;32m"
-curl --silent --insecure "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]'
+# https://api.qrserver.com/v1/create-qr-code?data=
+#curl --max-time 5 --cacert "${SB_CERTIFICATE_FILE}" -s "${PUBLIC_API_URL}/access-keys"
+curl --silent --insecure --pinnedpubkey "sha256//$pinnedPubkey" "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]'
 echo -e "\033[0m"
 
-echo "To add more users:"
+curl --silent --insecure --pinnedpubkey "sha256//$pinnedPubkey" "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]' | xargs printf 'echo -n "%s" | qrencode -t UTF8\n'| head -n 1 | bash -
+
+echo
+echo "Add more users, run:"
 echo -e "\033[1;32m"
 echo "export apiUrl=\"${apiUrl}\" pinnedPubkey=\"${pinnedPubkey}\""
-echo "curl --silent --insecure --pinnedpubkey \"sha256//\$pinnedPubkey\" \$apiUrl/access-keys/ -X POST | jq -r .accessUrl"
+echo "curl --silent --insecure --pinnedpubkey \"sha256//$pinnedPubkey\" \"$apiUrl/access-keys/\" -X POST | jq -r .accessUrl"
 echo -e "\033[0m"
+echo "For more info, visit https://getoutline.org"
+
 
 cat <<END_OF_SERVER_OUTPUT
 To manage your Outline server, please copy the following line (including curly
 brackets) into Step 2 of the Outline Manager interface:
 
 $(echo -e "\033[1;32m{\"apiUrl\":\"${apiUrl}\",\"certSha256\":\"${certSha256}\"}\033[0m")
-echo
 END_OF_SERVER_OUTPUT
 
 # curl --silent --insecure "${apiUrl}/metrics/transfer" | jq .

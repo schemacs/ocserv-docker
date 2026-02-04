@@ -22,6 +22,7 @@ function set_hostname() {
 
 PUBLIC_PORT=8443
 PUBLIC_HOSTNAME=""
+CONTAINER_NAME='ocserv'
 set_hostname
 readonly PUBLIC_HOSTNAME
 echo "Your Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
@@ -43,14 +44,12 @@ fi
 SALT=$(openssl rand -hex 8)
 PASSWORD_HASH=$(openssl passwd -6 -salt "$SALT" "$OCSERV_PASSWORD")
 
-
 #sudo docker build -t ocserv https://github.com/iw4p/OpenConnect-Cisco-AnyConnect-VPN-Server-OneKey-ocserv.git
 sudo docker build -t ocserv https://github.com/schemacs/ocserv-docker.git
 
-sudo docker run --name ocserv --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -d ocserv
+sudo docker run --name "$CONTAINER_NAME" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -d ocserv
 
 sudo ufw disable
-
 
 sudo docker exec ocserv bash -c "
     set -e
@@ -62,4 +61,10 @@ sudo docker exec ocserv bash -c "
 "
 
 echo "User '$OCSERV_USER_NAME' added/updated successfully."
-echo "Connect with Anyconnect or Openconnect at $PUBLIC_HOSTNAME:$PUBLIC_PORT"
+echo "Connect with Anyconnect or Openconnect:"
+
+echo -e "\033[1;32m"
+echo Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT
+echo User name: $OCSERV_USER_NAME
+echo Password: $OCSERV_PASSWORD
+echo -e "\033[0m"
