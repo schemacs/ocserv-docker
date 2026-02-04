@@ -39,27 +39,33 @@ set_hostname
 readonly PUBLIC_HOSTNAME
 echo "   Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
 
-if ! read -r -p "Your new username: " -t 300 OCSERV_USER_NAME < /dev/tty; then
+if [ -t 0 ] && [ -e /dev/tty ]; then
+  if ! read -r -p "Your new username: " -t 300 OCSERV_USER_NAME < /dev/tty; then
+      OCSERV_USER_NAME="$(gen_username)"
+      echo
+      echo "⏰ Timeout. Auto-generated username: $OCSERV_USER_NAME"
+  fi
+  
+  if ! read -r -s -p "Your new password: " -t 300 OCSERV_PASSWORD < /dev/tty; then
+      OCSERV_PASSWORD="$(gen_password)"
+      OCSERV_PASSWORD_CONFIRM="$OCSERV_PASSWORD"
+      echo
+      echo "⏰ Timeout. Auto-generated password: $OCSERV_PASSWORD"
+  else
+      echo
+      if ! read -r -s -p " Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM < /dev/tty; then
+          echo
+          echo "❌ Password confirmation timeout"
+          exit 1
+      fi
+      echo
+  fi
+else
     OCSERV_USER_NAME="$(gen_username)"
-    echo
-    echo "⏰ Timeout. Auto-generated username: $OCSERV_USER_NAME"
-fi
-echo
-
-if ! read -r -s -p "Your new password: " -t 300 OCSERV_PASSWORD < /dev/tty; then
     OCSERV_PASSWORD="$(gen_password)"
     OCSERV_PASSWORD_CONFIRM="$OCSERV_PASSWORD"
-    echo
-    echo "⏰ Timeout. Auto-generated password: $OCSERV_PASSWORD"
-else
-    echo
-    if ! read -r -s -p " Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM < /dev/tty; then
-        echo
-        echo "❌ Password confirmation timeout"
-        exit 1
-    fi
-    echo
 fi
+
 
 if [[ "$OCSERV_PASSWORD" != "$OCSERV_PASSWORD_CONFIRM" ]]; then
     echo "❌ Passwords do not match"
