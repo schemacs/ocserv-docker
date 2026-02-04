@@ -25,13 +25,11 @@ PUBLIC_HOSTNAME=""
 CONTAINER_NAME='ocserv'
 set_hostname
 readonly PUBLIC_HOSTNAME
-echo "Your Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
+echo          "   Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
+read -r -p    "Your new username: " -t 300 OCSERV_USER_NAME < /dev/tty
+read -r -s -p "Your new password: " -t 300 OCSERV_PASSWORD < /dev/tty
 echo
-read -r -p "Your username: " -t 300 OCSERV_USER_NAME < /dev/tty
-echo
-read -r -s -p "Your password: " -t 300 OCSERV_PASSWORD < /dev/tty
-echo
-read -r -s -p "Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM < /dev/tty
+read -r -s -p " Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM < /dev/tty
 echo > /dev/tty
 echo
 
@@ -40,9 +38,17 @@ if [[ "$OCSERV_PASSWORD" != "$OCSERV_PASSWORD_CONFIRM" ]]; then
     exit 1
 fi
 
-### ===== 2. 生成 SHA-512 crypt hash（$6$）=====
 SALT=$(openssl rand -hex 8)
 PASSWORD_HASH=$(openssl passwd -6 -salt "$SALT" "$OCSERV_PASSWORD")
+
+command -v command &> /dev/null || (
+    # Change umask so that /usr/share/keyrings/docker-archive-keyring.gpg has the right permissions.
+    # See https://github.com/Jigsaw-Code/outline-server/issues/951.
+    # We do this in a subprocess so the umask for the calling process is unaffected.
+    umask 0022
+    fetch https://get.docker.com/ | sh
+) >&2
+
 
 #sudo docker build -t ocserv https://github.com/iw4p/OpenConnect-Cisco-AnyConnect-VPN-Server-OneKey-ocserv.git
 sudo docker build -t ocserv https://github.com/schemacs/ocserv-docker.git
@@ -60,11 +66,11 @@ sudo docker exec ocserv bash -c "
     mv /etc/ocserv/ocpasswd.tmp /etc/ocserv/ocpasswd
 "
 
-echo "User '$OCSERV_USER_NAME' added/updated successfully."
+#echo "User '$OCSERV_USER_NAME' added/updated successfully."
 echo "Connect with Anyconnect or Openconnect:"
 
 echo -e "\033[1;32m"
-echo Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT
-echo User name: $OCSERV_USER_NAME
-echo Password: $OCSERV_PASSWORD
+echo "Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
+echo "      Username: $OCSERV_USER_NAME"
+echo "      Password: $OCSERV_PASSWORD"
 echo -e "\033[0m"
