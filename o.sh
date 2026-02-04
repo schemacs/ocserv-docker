@@ -660,9 +660,9 @@ brackets) into Step 2 of the Outline Manager interface:
 $(echo -e "\033[1;32m{\"apiUrl\":\"$(get_field_value apiUrl)\",\"certSha256\":\"$(get_field_value certSha256)\"}\033[0m")
 END_OF_SERVER_OUTPUT
 
-  apt-get install -qq -o Dpkg::Use-Pty=0 --yes jq lsof &>/dev/null \
-      || yum --quiet --assumeyes install jq lsof &>/dev/null \
-      || apk add --quiet jq lsof &>/dev/null || pacman --sync --quiet jq lsof &>/dev/null
+  apt-get install -qq -o Dpkg::Use-Pty=0 --yes jq lsof qrencode &>/dev/null \
+      || yum --quiet --assumeyes install jq lsof qrencode &>/dev/null \
+      || apk add --quiet jq lsof qrencode &>/dev/null || pacman --sync --quiet jq lsof qrencode &>/dev/null
   if ! command -v jq &> /dev/null; then
       echo "jq not installed"
       exit 2
