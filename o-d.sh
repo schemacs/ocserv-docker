@@ -79,7 +79,7 @@ fi
 SALT=$(openssl rand -hex 8)
 PASSWORD_HASH=$(openssl passwd -6 -salt "$SALT" "$OCSERV_PASSWORD")
 
-command -v command &> /dev/null || (
+command -v docker &> /dev/null || (
     # Change umask so that /usr/share/keyrings/docker-archive-keyring.gpg has the right permissions.
     # See https://github.com/Jigsaw-Code/outline-server/issues/951.
     # We do this in a subprocess so the umask for the calling process is unaffected.
