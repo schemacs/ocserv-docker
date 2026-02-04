@@ -27,7 +27,6 @@ gen_username() {
 }
 
 gen_password() {
-    # 8 位：字母+数字+特殊字符
     tr -dc 'A-Za-z0-9!@#$%^&*' </dev/urandom | head -c 8
 }
 
@@ -37,9 +36,9 @@ PUBLIC_HOSTNAME=""
 CONTAINER_NAME='ocserv'
 set_hostname
 readonly PUBLIC_HOSTNAME
-echo "   Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
 
 if [ -t 0 ] && [ -e /dev/tty ]; then
+  echo "   Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
   if ! read -r -p "Your new username: " -t 300 OCSERV_USER_NAME < /dev/tty; then
       OCSERV_USER_NAME="$(gen_username)"
       echo
@@ -60,21 +59,17 @@ if [ -t 0 ] && [ -e /dev/tty ]; then
       fi
       echo
   fi
+  echo > /dev/tty
 else
     OCSERV_USER_NAME="$(gen_username)"
     OCSERV_PASSWORD="$(gen_password)"
     OCSERV_PASSWORD_CONFIRM="$OCSERV_PASSWORD"
 fi
 
-
 if [[ "$OCSERV_PASSWORD" != "$OCSERV_PASSWORD_CONFIRM" ]]; then
     echo "❌ Passwords do not match"
     exit 1
 fi
-
-
-echo > /dev/tty
-echo
 
 if [[ "$OCSERV_PASSWORD" != "$OCSERV_PASSWORD_CONFIRM" ]]; then
     echo "Error: passwords do not match"
