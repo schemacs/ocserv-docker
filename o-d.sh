@@ -26,11 +26,12 @@ set_hostname
 readonly PUBLIC_HOSTNAME
 echo "Your Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
 echo
-read -r -p "Your username: " -t 300 OCSERV_USER_NAME
+read -r -p "Your username: " -t 300 OCSERV_USER_NAME < /dev/tty
 echo
-read -r -s -p "Your password: " -t 300 OCSERV_PASSWORD
+read -r -s -p "Your password: " -t 300 OCSERV_PASSWORD < /dev/tty
 echo
-read -r -s -p "Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM
+read -r -s -p "Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM < /dev/tty
+echo > /dev/tty
 echo
 
 if [[ "$OCSERV_PASSWORD" != "$OCSERV_PASSWORD_CONFIRM" ]]; then
