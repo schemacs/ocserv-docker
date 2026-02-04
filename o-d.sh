@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function fetch() {
+  curl --silent --show-error --fail "$@"
+}
+
 function set_hostname() {
   # These are URLs that return the client's apparent IP address.
   # We have more than one to try in case one starts failing
@@ -17,18 +21,17 @@ function set_hostname() {
 }
 
 PUBLIC_PORT=8443
+PUBLIC_HOSTNAME=""
 set_hostname
 readonly PUBLIC_HOSTNAME
 echo "Your Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
 echo
-read -r -p "Your user name: " -t 300 OCSERV_USER_NAME
+read -r -p "Your username: " -t 300 OCSERV_USER_NAME
 echo
 read -r -s -p "Your password: " -t 300 OCSERV_PASSWORD
 echo
 read -r -s -p "Confirm password: " -t 300 OCSERV_PASSWORD_CONFIRM
 echo
-
-PUBLIC_HOSTNAME
 
 if [[ "$OCSERV_PASSWORD" != "$OCSERV_PASSWORD_CONFIRM" ]]; then
     echo "Error: passwords do not match"
