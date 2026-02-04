@@ -100,7 +100,7 @@ sudo docker run --name "$CONTAINER_NAME" --privileged -p $PUBLIC_PORT:443 -p $PU
 
 sudo ufw disable
 
-sudo docker exec ocserv bash -c "
+sudo docker exec ocserv sh -c "
     set -e
     touch /etc/ocserv/ocpasswd
     chmod 600 /etc/ocserv/ocpasswd
@@ -108,6 +108,7 @@ sudo docker exec ocserv bash -c "
     echo '${OCSERV_USER_NAME}::${PASSWORD_HASH}' >> /etc/ocserv/ocpasswd.tmp
     mv /etc/ocserv/ocpasswd.tmp /etc/ocserv/ocpasswd
 "
+
 
 #echo "User '$OCSERV_USER_NAME' added/updated successfully."
 echo "Connect with Anyconnect or Openconnect:"
