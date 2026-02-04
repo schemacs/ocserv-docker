@@ -104,10 +104,9 @@ sudo docker exec ocserv sh -c "
     mv /etc/ocserv/ocpasswd.tmp /etc/ocserv/ocpasswd
 "
 
-
 #echo "User '$OCSERV_USER_NAME' added/updated successfully."
-echo "Connect with Anyconnect or Openconnect:"
-
+echo
+echo -n "Connect with Anyconnect or Openconnect:"
 echo -e "\033[1;32m"
 echo "Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
 echo "      Username: $OCSERV_USER_NAME"

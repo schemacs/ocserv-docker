@@ -197,6 +197,7 @@ function handle_docker_container_conflict() {
   else
     PROMPT="${PROMPT} Would you like to replace this container? If you answer no, we will proceed with the remainder of the installation."
   fi
+  # TODO if redirected with pipe
   if ! confirm "${PROMPT}"; then
     if ${EXIT_ON_NEGATIVE_USER_RESPONSE}; then
       exit 0
