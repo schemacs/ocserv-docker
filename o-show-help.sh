@@ -14,7 +14,7 @@ pinnedPubkey=$(sudo openssl x509 -in "${SB_CERTIFICATE_FILE}" -pubkey -noout | o
 
 echo
 echo "To connect to your Outline Server, please copy one of the following access keys"
-echo "to the Outline Client:"
+echo "to the Outline/Shadowsocks Client:"
 echo -e "\033[1;32m"
 curl --silent --insecure "${apiUrl}/access-keys" | jq -r '.[] | map(.accessUrl) | .[]'
 echo -e "\033[0m"
@@ -30,6 +30,7 @@ To manage your Outline server, please copy the following line (including curly
 brackets) into Step 2 of the Outline Manager interface:
 
 $(echo -e "\033[1;32m{\"apiUrl\":\"${apiUrl}\",\"certSha256\":\"${certSha256}\"}\033[0m")
+echo
 END_OF_SERVER_OUTPUT
 
 # curl --silent --insecure "${apiUrl}/metrics/transfer" | jq .

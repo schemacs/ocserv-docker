@@ -702,7 +702,7 @@ END_OF_SERVER_OUTPUT
 
   echo
   echo "To connect to your Outline Server, please copy one of the following access keys"
-  echo "into the Outline Client:"
+  echo "into the Outline/Shadowsocks Client:"
   echo -e "\033[1;32m"
   # https://api.qrserver.com/v1/create-qr-code?data=
   #curl --max-time 5 --cacert "${SB_CERTIFICATE_FILE}" -s "${PUBLIC_API_URL}/access-keys"
