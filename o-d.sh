@@ -32,6 +32,7 @@ gen_password() {
 
 
 PUBLIC_PORT=8443
+PUBLIC_PORT_BAK=88
 PUBLIC_HOSTNAME=""
 CONTAINER_NAME='ocserv'
 set_hostname
@@ -88,10 +89,11 @@ command -v docker &> /dev/null || (
 ) >&2
 
 
+# TODO wget: unable to resolve host address 'ftp.infradead.org'
 #sudo docker build -t ocserv https://github.com/iw4p/OpenConnect-Cisco-AnyConnect-VPN-Server-OneKey-ocserv.git
 sudo docker build -t ocserv https://github.com/schemacs/ocserv-docker.git
 
-sudo docker run --name "$CONTAINER_NAME" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -d ocserv
+sudo docker run --name "$CONTAINER_NAME" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp --privileged -p $PUBLIC_PORT_BAK:443 -p $PUBLIC_PORT_BAK:443/udp -d ocserv
 
 sudo ufw disable
 
