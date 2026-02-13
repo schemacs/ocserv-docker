@@ -93,16 +93,19 @@ command -v docker &> /dev/null || (
 #sudo docker build -t ocserv https://github.com/iw4p/OpenConnect-Cisco-AnyConnect-VPN-Server-OneKey-ocserv.git
 sudo docker build -t ocserv https://github.com/schemacs/ocserv-docker.git
 
-sudo docker run --name "$CONTAINER_NAME" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp --privileged -p $PUBLIC_PORT_BAK:443 -p $PUBLIC_PORT_BAK:443/udp -d ocserv
+#sudo docker run --name "${CONTAINER_NAME}" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -d ocserv
+#sudo docker run --name "${CONTAINER_NAME}2" --privileged -p $PUBLIC_PORT_BAK:443 -p $PUBLIC_PORT_BAK:443/udp -d ocserv
+sudo docker run --name "${CONTAINER_NAME}" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -p $PUBLIC_PORT_BAK:443 -p $PUBLIC_PORT_BAK:443/udp -d ocserv
 
 sudo ufw disable
 
-sudo docker exec ocserv sh -c "
+sudo docker exec "${CONTAINER_NAME}" sh -c "
     set -e
     touch /etc/ocserv/ocpasswd
     chmod 600 /etc/ocserv/ocpasswd
-    grep -v '^${OCSERV_USER_NAME}:' /etc/ocserv/ocpasswd > /etc/ocserv/ocpasswd.tmp || true
+    grep -Ev '^${OCSERV_USER_NAME}2?:' /etc/ocserv/ocpasswd > /etc/ocserv/ocpasswd.tmp || true
     echo '${OCSERV_USER_NAME}::${PASSWORD_HASH}' >> /etc/ocserv/ocpasswd.tmp
+    echo '${OCSERV_USER_NAME}2::${PASSWORD_HASH}' >> /etc/ocserv/ocpasswd.tmp
     mv /etc/ocserv/ocpasswd.tmp /etc/ocserv/ocpasswd
 "
 
