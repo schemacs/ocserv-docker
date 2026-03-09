@@ -103,9 +103,8 @@ sudo docker exec "${CONTAINER_NAME}" sh -c "
     set -e
     touch /etc/ocserv/ocpasswd
     chmod 600 /etc/ocserv/ocpasswd
-    grep -Ev '^${OCSERV_USER_NAME}2?:' /etc/ocserv/ocpasswd > /etc/ocserv/ocpasswd.tmp || true
+    grep -Ev '^${OCSERV_USER_NAME}:' /etc/ocserv/ocpasswd > /etc/ocserv/ocpasswd.tmp || true
     echo '${OCSERV_USER_NAME}::${PASSWORD_HASH}' >> /etc/ocserv/ocpasswd.tmp
-    echo '${OCSERV_USER_NAME}2::${PASSWORD_HASH}' >> /etc/ocserv/ocpasswd.tmp
     mv /etc/ocserv/ocpasswd.tmp /etc/ocserv/ocpasswd
 "
 
