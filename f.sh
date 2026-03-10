@@ -89,4 +89,4 @@ gitlab_download openconnect/openconnect-gui exe
 set_hostname
 port=$(python3 -c 'import socket;s=socket.socket();s.bind(("",0));print(s.getsockname()[1]);s.close()')
 echo "Download clients at http://$PUBLIC_HOSTNAME:$port"
-python3 -m http.server "$port" --bind 0.0.0.0 2>/dev/null
+python3 -m http.server "$port" --bind 0.0.0.0 | grep -v '^Serving HTTP on'
