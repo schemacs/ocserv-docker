@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 #cd /var/www/html
+tmpdir=$(mktemp -d)
+cd "$tmpdir" || exit
 
 PUBLIC_HOSTNAME=127.0.0.1
 function set_hostname() {
@@ -86,5 +88,5 @@ gitlab_download openconnect/openconnect-gui exe
 
 set_hostname
 port=$(python3 -c 'import socket;s=socket.socket();s.bind(("",0));print(s.getsockname()[1]);s.close()')
-echo "Download at http://$PUBLIC_HOSTNAME:$port"
-python3 -m http.server "$port" --bind 0.0.0.0
+echo "Download clients at http://$PUBLIC_HOSTNAME:$port"
+python3 -m http.server "$port" --bind 0.0.0.0 2>/dev/null
