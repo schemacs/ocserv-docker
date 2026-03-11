@@ -88,5 +88,9 @@ gitlab_download openconnect/openconnect-gui exe
 
 set_hostname
 port=$(python3 -c 'import socket;s=socket.socket();s.bind(("",0));print(s.getsockname()[1]);s.close()')
-echo "Download clients at http://$PUBLIC_HOSTNAME:$port"
+echo '''iOS
+ anyconnect: https://apps.apple.com/us/app/cisco-secure-client/id1135064690
+    outline: https://apps.apple.com/us/app/outline-app/id1356177741
+'''
+echo "Download Android/Windows clients from http://$PUBLIC_HOSTNAME:$port"
 python3 -m http.server "$port" --bind 0.0.0.0 | grep -v '^Serving HTTP on'
