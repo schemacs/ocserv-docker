@@ -32,7 +32,7 @@ gen_password() {
 
 
 PUBLIC_PORT=8443
-PUBLIC_PORT_BAK=88
+PUBLIC_PORT_BAK=9443
 PUBLIC_HOSTNAME=""
 CONTAINER_NAME='ocserv'
 set_hostname
@@ -94,7 +94,6 @@ command -v docker &> /dev/null || (
 sudo docker build -t ocserv https://github.com/schemacs/ocserv-docker.git
 
 #sudo docker run --name "${CONTAINER_NAME}" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -d ocserv
-#sudo docker run --name "${CONTAINER_NAME}2" --privileged -p $PUBLIC_PORT_BAK:443 -p $PUBLIC_PORT_BAK:443/udp -d ocserv
 sudo docker run --name "${CONTAINER_NAME}" --privileged -p $PUBLIC_PORT:443 -p $PUBLIC_PORT:443/udp -p $PUBLIC_PORT_BAK:443 -p $PUBLIC_PORT_BAK:443/udp -d ocserv
 
 sudo ufw disable
