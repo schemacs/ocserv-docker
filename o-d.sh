@@ -38,7 +38,11 @@ CONTAINER_NAME='ocserv'
 set_hostname
 readonly PUBLIC_HOSTNAME
 
-if [ -t 0 ] && [ -e /dev/tty ]; then
+if [[ -n "${DEFAULT_ACCESS_USERNAME}" && -n "${DEFAULT_ACCESS_PASSWORD}" ]]; then
+    OCSERV_USER_NAME="${DEFAULT_ACCESS_USERNAME}"
+    OCSERV_PASSWORD="${DEFAULT_ACCESS_PASSWORD}"
+    OCSERV_PASSWORD_CONFIRM="${OCSERV_PASSWORD}"
+elif [ -t 0 ] && [ -e /dev/tty ]; then
   echo "   Server Address: $PUBLIC_HOSTNAME:$PUBLIC_PORT"
   if ! read -r -p "Your new username: " -t 300 OCSERV_USER_NAME < /dev/tty; then
       OCSERV_USER_NAME="$(gen_username)"
